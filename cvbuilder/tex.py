@@ -88,7 +88,6 @@ def build(c: Config, p: Profile):
         with open(path, "w") as file:
             file.write(ENV.get_template(DEFAULT_TEMPLATE).render(config=c, profile=p))
         compile(path, p.name)
-        # TODO: Cleanup
     except Exception as e:
         raise CompilationFailure(e)
 
@@ -97,7 +96,6 @@ def cleanup():
     files = [p for p in BUILD_PATH.rglob("*") if p.suffix in CLEANABLE_EXTENSIONS]
     for f in files:
         try:
-            input()
             f.unlink()
         except FileNotFoundError:
             error(f"File {f.name} could not be cleaned up: Not found.")
