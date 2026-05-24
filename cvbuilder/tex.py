@@ -1,5 +1,6 @@
 from os import chdir, getcwd
 from pathlib import Path
+from shutil import which
 from subprocess import PIPE, CalledProcessError, run
 
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
@@ -7,7 +8,6 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from cvbuilder.logs import debug, error
 from cvbuilder.models.config import Config
 from cvbuilder.models.profiles.profiles import Profile
-
 
 BUILD_PATH = Path(__file__).parent.parent / ".build"
 COMPILER_PROG = "lualatex"
@@ -23,13 +23,17 @@ ENV = Environment(
 )
 
 
+class CompilerCheckFailure(Exception):
+    pass
+
+
 class CompilationFailure(Exception):
     pass
 
 
-def lualatex_check():
-    # TODO: Implement
-    pass
+def tex_check():
+    if not which(COMPILER_PROG):
+        raise CompilerCheckFailure(f"Could not find '{COMPILER_PROG}' executable")
 
 
 # FIXME: This is deadcode, not sure if escaping is better done on render or in input
