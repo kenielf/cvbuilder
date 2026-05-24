@@ -1,0 +1,173 @@
+% vi: ft=tex
+% !TEX encoding = UTF-8 Unicode
+\documentclass[a4paper,12pt]{article}
+\usepackage[left=1cm,top=1cm,bottom=1cm,right=1cm]{geometry}
+
+\usepackage{luatexja}
+
+% Pagestyle
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+% \fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+% Margins, Columns, Indentation & Spacing
+\usepackage{multicol}
+\usepackage{indentfirst}
+\usepackage[document]{ragged2e}  % For extendability
+\usepackage{sectsty}
+\usepackage{microtype}
+\usepackage{etoolbox}
+\sectionfont{\centering}
+\setlength{\columnsep}{1cm}
+\setlength\itemsep{0.5em}
+
+% URL Support
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,
+    urlcolor=blue,
+    pdftitle={Curriculum - {{ config.identity.get_full_name() -}} },
+    pdfpagemode=FullScreen,
+}
+\urlstyle{same}
+
+% Enumerations
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=5.5mm}
+\setlist{nosep}
+
+% --- Document: Commands ---
+{%- raw %}
+% Separator: \sep
+\newcommand{\sep}{\vspace{-0.75em}\hrule\vspace{1em}}
+
+% Section: \sec{Label}
+\newcommand{\fsec}[1]{\vspace{-1.25em}\section*{#1}\sep}
+
+% Occupation: \occupation{Work}
+\newcommand{\occupation}[1]{\faSuitcase\hspace{0.25em}#1}
+
+% Location: \location{State, Country}
+\newcommand{\location}[1]{\faGlobe\hspace{0.25em}#1}
+
+% Email: \email{something@provider.com}
+\newcommand{\email}[1]{\faAt\hspace{0.25em}#1}
+
+% Github Link: \github{\url{https://github.com/user/repo}}
+\newcommand{\github}[1]{\faGithub\hspace{0.25em}#1}
+
+% LinkedIn Link: \linkedin{\url{https://linkedin.com/in/user}}
+\newcommand{\linkedin}[1]{\faLinkedin\hspace{0.25em}#1}
+
+% Topics: \topic{example}{text}
+\newcommand{\topic}[2]{\textbf{#1:} #2}
+
+% Experience: \experience{contractor}{position}{location}{start}{end}{details}
+\newcommand{\experience}[6]{
+    \noindent\textbf{#1} \hfill #3 \\
+    \noindent#2 \hfill #4 -- #5
+    \begin{itemize}[align=right]
+        #6
+    \end{itemize}
+    \vspace{1em}
+}
+
+% Project: \project{title}{language}{details}
+\newcommand{\project}[3]{
+    \noindent\textbf{#1} \textit{(#2)}
+    \begin{itemize}[align=right]
+        #3
+    \end{itemize}
+    \vspace{1em}
+}
+
+% Proficiency: \proficiency{language}{methodology}{score}{validation number}
+\newcommand{\proficiency}[4]{
+    \textbf{#1\ifstrempty{#2}{:}{ \textit(#2):}} #3 \hfill #4
+}
+
+% Education: \education{name}{location}{type}{start}{end}
+\newcommand{\education}[6]{
+    \textbf{#1} -- #3\hfill{#2}\\
+    #4\hfill#5 -- #6
+}
+
+{% endraw -%}
+% --- Document: Start ---
+\begin{document}
+% Alignment
+\raggedright
+
+% Name and Occupation
+\begin{center}
+    {\huge \textbf{ {{- config.identity.get_full_name(shorten=True) | upper -}} }}
+    \vspace{0.25em}
+
+    {\Large {{ profile.name -}} }
+\end{center}
+\vspace{-0.5em}
+
+% Skills
+\fsec{ {{- config.get_override("skills") | default("Skills", true) -}} }
+{%- for skill in profile.skills %}
+    \topic{ {{- skill.scope -}} }{ {{- ", ".join(skill.values) -}} }
+{% endfor %}
+% Language Proficiency
+\fsec{ {{- config.get_override("languages") | default("Languages", true) -}} }
+
+{%- for language in profile.language %}
+    \proficiency{
+        {{- language.name -}}
+    }{
+        {{- language.test if language.test -}}
+    }{
+        {{- language.level -}}
+    }{
+        {%- if language.test_registration -%}
+        \textbf{ {{- language.test_registration -}} :} {{ language.test_code -}}
+        {%- endif -%}
+    }
+{% endfor %}
+% Professional Experience
+\fsec{ {{- config.get_override("experience") | default("Professional Experience", true) -}} }
+{%- for experience in profile.experience %}
+    \experience{
+        {{- experience.at -}}
+    }{
+        {{- experience.role -}}
+    }{
+        {{- experience.location -}}
+    }{
+        {{- experience.start -}}
+    }{
+        {{- experience.end if experience.end -}}
+    }{
+        {%- for action in experience.actions %}
+        \item {{ action }}
+        {%- endfor %}
+    }
+{% endfor %}
+% Projects
+\fsec{ {{- config.get_override("projects") | default("Projects", true) -}} }
+{%- for project in profile.project %}
+    \project{ {{- project.name -}} }{ {{- project.language -}} }{
+        {%- for detail in project.details %}
+        \item {{ detail }}
+        {%- endfor %}
+    }
+{% endfor %}
+% Education
+\fsec{ {{- config.get_override("education") | default("Education", true) -}} }
+{%- for education in profile.education %}
+    \education{ {{- education.institution -}} }{ {{- education.location -}} }
+        { {{- education.course -}} }{ {{- education.level -}} }
+        { {{- education.start -}} }{ {{- education.end -}} }
+{% endfor %}
+% --- Document: End ---
+\end{document}
+

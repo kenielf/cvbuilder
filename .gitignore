@@ -1,0 +1,6 @@
+# TODO: Organize this
+/build
+/.build
+/identity.toml
+
+__pycache__
