@@ -16,6 +16,8 @@ COMPILER_ARGS = (
     "-halt-on-error",
 )
 
+CLEANABLE_EXTENSIONS = {".aux", ".log", ".out", ".toc", ".lof", ".lot"}
+
 DEFAULT_TEMPLATE = "compact.tex.j2"
 
 ENV = Environment(
@@ -89,3 +91,13 @@ def build(c: Config, p: Profile):
         # TODO: Cleanup
     except Exception as e:
         raise CompilationFailure(e)
+
+
+def cleanup():
+    files = [p for p in BUILD_PATH.rglob("*") if p.suffix in CLEANABLE_EXTENSIONS]
+    for f in files:
+        try:
+            input()
+            f.unlink()
+        except FileNotFoundError:
+            error(f"File {f.name} could not be cleaned up: Not found.")

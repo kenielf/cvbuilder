@@ -2,7 +2,7 @@ from pathlib import Path
 
 from cvbuilder.config import ConfigError, parse_config
 from cvbuilder.logs import error, info
-from cvbuilder.tex import CompilationFailure, CompilerCheckFailure, build, tex_check
+from cvbuilder.tex import CompilationFailure, CompilerCheckFailure, build, cleanup, tex_check
 
 
 def main():
@@ -26,3 +26,4 @@ def main():
             build(config, profile)
         except CompilationFailure as e:
             error(str(e))
+    cleanup()
