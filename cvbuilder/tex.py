@@ -48,7 +48,7 @@ def compile(p: Path, name: str, is_rerun: bool = False):
     try:
         chdir(BUILD_PATH)
         r = run(
-            [COMPILER_PROG, *COMPILER_ARGS, str(p).split("/")[-1]],
+            [COMPILER_PROG, *COMPILER_ARGS, p.name],
             stdout=PIPE,
             stderr=PIPE,
             check=True,
