@@ -57,7 +57,7 @@ def compile(p: Path, name: str, is_rerun: bool = False):
         )
         if "Package rerunfilecheck Warning:" in r.stdout:
             if not is_rerun:
-                debug("Compilation successful, but requires rerun")
+                debug("Compilation successful, but required rerun")
                 compile(p, name, is_rerun=True)
             else:
                 error("Requested rerun on rerun, bad.")

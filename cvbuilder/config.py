@@ -11,6 +11,9 @@ class ConfigError(Exception):
 
 
 def parse_config(f: Path):
+    if not f.exists():
+        raise ConfigError(f"Cannot parse configuration: file '{f.name}' does not exist")
+
     with open(f, "rb") as file:
         data = load(file)
 

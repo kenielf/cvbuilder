@@ -10,3 +10,6 @@ your-command = "main:main"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.package-data]
+project_name_here = ["templates/*"]

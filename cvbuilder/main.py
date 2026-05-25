@@ -1,29 +1,24 @@
 from pathlib import Path
 
+from cvbuilder.args import PARSER
 from cvbuilder.config import ConfigError, parse_config
-from cvbuilder.logs import error, info
-from cvbuilder.tex import CompilationFailure, CompilerCheckFailure, build, cleanup, tex_check
+from cvbuilder.logs import fatal, info
+from cvbuilder.tex import CompilerCheckFailure, build, cleanup, tex_check
 
 
 def main():
-    # TODO: Implement CLI interface
-    f = "./identity.toml"
-    try:
-        config = parse_config(Path(f))
-    except ConfigError as e:
-        error(str(e))
-        exit(1)
+    args = PARSER.parse_args()
 
     try:
         tex_check()
-    except CompilerCheckFailure as e:
-        error(str(e))
-        exit(1)
+        config = parse_config(Path(args.identity_file))
 
-    for profile in config.profile:
-        try:
+        for profile in config.profile:
             info(f"Compiling Profile: {profile.name}")
             build(config, profile)
-        except CompilationFailure as e:
-            error(str(e))
-    cleanup()
+
+        if args.cleanup:
+            info(f"Cleaning up all profiles...")
+            cleanup()
+    except (CompilerCheckFailure, ConfigError) as e:
+        fatal(f"{type(e).__name__}: {str(e)}")

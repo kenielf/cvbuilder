@@ -1,4 +1,4 @@
-from sys import stderr
+from sys import exit, stderr
 
 
 def debug(msg: str):
@@ -11,3 +11,8 @@ def info(msg: str):
 
 def error(msg: str):
     print(f"\x1b[31m[ERROR]\x1b[00m {msg}", file=stderr)
+
+
+def fatal(msg: str):
+    error(msg)
+    exit(1)
