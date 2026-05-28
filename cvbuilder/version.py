@@ -3,7 +3,7 @@ from pathlib import Path
 from tomllib import TOMLDecodeError, load
 
 from cvbuilder.constants import PROJECT
-from cvbuilder.logs import error, info
+from cvbuilder.logs import error
 
 version: str
 try:
