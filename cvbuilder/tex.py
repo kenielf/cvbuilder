@@ -3,12 +3,14 @@ from pathlib import Path
 from shutil import which
 from subprocess import PIPE, CalledProcessError, run
 
-from jinja2 import Environment, FileSystemLoader, StrictUndefined
+from jinja2 import Environment, PackageLoader, StrictUndefined
 
+from cvbuilder.constants import PROJECT
 from cvbuilder.logs import debug, error
 from cvbuilder.models.config import Config
 from cvbuilder.models.profiles.profiles import Profile
 
+TEMPLATE_DIR = Path(__file__).parent / "templates"
 BUILD_PATH = Path(__file__).parent.parent / ".build"
 COMPILER_PROG = "lualatex"
 COMPILER_ARGS = (
@@ -21,7 +23,9 @@ CLEANABLE_EXTENSIONS = {".aux", ".log", ".out", ".toc", ".lof", ".lot"}
 DEFAULT_TEMPLATE = "compact.tex.j2"
 
 ENV = Environment(
-    loader=FileSystemLoader("templates"), undefined=StrictUndefined, autoescape=False
+    loader=PackageLoader(PROJECT, "templates"),
+    undefined=StrictUndefined,
+    autoescape=False,
 )
 
 
