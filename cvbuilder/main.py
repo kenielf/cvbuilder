@@ -14,7 +14,6 @@ def main():
     except CompilerCheckFailure as e:
         fatal(str(e))
 
-
     failures = []
     for identity in args.identity_file:
         p = Path(identity)
