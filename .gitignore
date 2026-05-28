@@ -1,6 +1,8 @@
-# TODO: Organize this
+# CVBuilder
 /build
 /.build
 /identity.toml
 
+# Python
 __pycache__
+*.egg-info/
