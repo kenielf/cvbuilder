@@ -2,7 +2,7 @@ from pathlib import Path
 
 from cvbuilder.args import PARSER
 from cvbuilder.config import ConfigError, parse_config
-from cvbuilder.logs import fatal, info
+from cvbuilder.logs import error, fatal, info
 from cvbuilder.tex import CompilerCheckFailure, build, cleanup, tex_check
 
 
@@ -11,14 +11,27 @@ def main():
 
     try:
         tex_check()
-        config = parse_config(Path(args.identity_file))
+    except CompilerCheckFailure as e:
+        fatal(str(e))
 
-        for profile in config.profile:
-            info(f"Compiling Profile: {profile.name}")
-            build(config, profile)
 
-        if args.cleanup:
-            info(f"Cleaning up all profiles...")
-            cleanup()
-    except (CompilerCheckFailure, ConfigError) as e:
-        fatal(f"{type(e).__name__}: {str(e)}")
+    failures = []
+    for identity in args.identity_file:
+        p = Path(identity)
+        try:
+            config = parse_config(p)
+
+            for profile in config.profile:
+                info(f"Compiling Profile: {profile.name}")
+                build(config, profile)
+
+            if args.cleanup:
+                info(f"Cleaning up all profiles...")
+                cleanup()
+        except ConfigError as e:
+            error(f"{type(e).__name__}: {str(e)}")
+            failures.append(p.name)
+            continue
+
+    if failures:
+        fatal("One or more compilations failed", code=2)

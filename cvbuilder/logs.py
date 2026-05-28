@@ -13,6 +13,6 @@ def error(msg: str):
     print(f"\x1b[31m[ERROR]\x1b[00m {msg}", file=stderr)
 
 
-def fatal(msg: str):
+def fatal(msg: str, code: int = 1):
     error(msg)
-    exit(1)
+    exit(code)
