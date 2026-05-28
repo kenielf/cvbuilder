@@ -46,11 +46,12 @@ def parse_config(f: Path) -> Config:
             data = load(file)
         except TOMLDecodeError as e:
             raise ConfigError(
-                f"Cannot parse configuration: file '{f.name}' is malformed (L#{e.lineno}, C#{e.colno})"
-            )
+                f"Cannot parse configuration: file '{f.name}' is malformed "
+                f"(L#{e.lineno}, C#{e.colno})"
+            ) from e
 
     try:
         return Config.model_validate(data)
     except ValidationError as errors:
-        for e in errors.errors():
-            raise ConfigError(parse_model_error(e))
+        reasons = ["\n".join(parse_model_error(e) for e in errors.errors())]
+        raise ConfigError(reasons) from errors
