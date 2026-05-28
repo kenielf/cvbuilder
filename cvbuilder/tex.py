@@ -1,6 +1,6 @@
 from os import chdir, getcwd
 from pathlib import Path
-from shutil import which
+from shutil import rmtree, which
 from subprocess import PIPE, CalledProcessError, run
 
 from jinja2 import Environment, PackageLoader, StrictUndefined
@@ -96,10 +96,13 @@ def build(c: Config, p: Profile):
         raise CompilationFailure(e)
 
 
-def cleanup():
-    files = [p for p in BUILD_PATH.rglob("*") if p.suffix in CLEANABLE_EXTENSIONS]
-    for f in files:
-        try:
-            f.unlink()
-        except FileNotFoundError:
-            error(f"File {f.name} could not be cleaned up: Not found.")
+def cleanup(all: bool = False):
+    if all:
+        rmtree(BUILD_PATH)  # NOTE: Technically unsafe, need to check later
+    else:
+        files = [p for p in BUILD_PATH.rglob("*") if p.suffix in CLEANABLE_EXTENSIONS]
+        for f in files:
+            try:
+                f.unlink()
+            except FileNotFoundError:
+                error(f"File {f.name} could not be cleaned up: Not found.")

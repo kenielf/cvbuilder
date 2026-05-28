@@ -14,23 +14,25 @@ def main():
     except CompilerCheckFailure as e:
         fatal(str(e))
 
-    failures = []
-    for identity in args.identity_file:
-        p = Path(identity)
-        try:
-            config = parse_config(p)
+    match args.command:
+        case "build":
+            failures = []
+            for identity in args.paths:
+                p = Path(identity)
+                try:
+                    config = parse_config(p)
 
-            for profile in config.profile:
-                info(f"Compiling Profile: {profile.name}")
-                build(config, profile)
+                    for profile in config.profile:
+                        info(f"Compiling Profile: {profile.name}")
+                        build(config, profile)
+                except ConfigError as e:
+                    error(f"{type(e).__name__}: {str(e)}")
+                    failures.append(p.name)
+                    continue
 
-            if args.cleanup:
-                info(f"Cleaning up all profiles...")
-                cleanup()
-        except ConfigError as e:
-            error(f"{type(e).__name__}: {str(e)}")
-            failures.append(p.name)
-            continue
+            if failures:
+                fatal("One or more compilations failed", code=2)
 
-    if failures:
-        fatal("One or more compilations failed", code=2)
+        case "clean":
+            info(f"Cleaning up all profiles...")
+            cleanup(all=args.all)
