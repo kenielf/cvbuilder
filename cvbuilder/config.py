@@ -53,5 +53,9 @@ def parse_config(f: Path) -> Config:
     try:
         return Config.model_validate(data)
     except ValidationError as errors:
-        reasons = ["\n".join(parse_model_error(e) for e in errors.errors())]
-        raise ConfigError(reasons) from errors
+        # TODO: Maybe move exceptions into a base exception class for better formatting
+        reasons = [parse_model_error(e) for e in errors.errors()]
+        if len(reasons) > 1:
+            raise ConfigError(f"Found multiple configuration errors:\n\t- " + "\n\t- ".join(reasons))
+        else:
+            raise ConfigError(f"Found a cofiguration error: {reasons[0]}")

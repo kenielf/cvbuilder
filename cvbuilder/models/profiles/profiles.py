@@ -8,11 +8,11 @@ from cvbuilder.models.profiles.skills import Skills
 
 class Profile(Base):
     name: str
-    skills: list[Skills]
-    language: list[Language]
-    experience: list[Experience]
-    project: list[Project]
-    education: list[Education]
+    skills: list[Skills] | None = None
+    language: list[Language] | None = None
+    experience: list[Experience] | None = None
+    project: list[Project] | None = None
+    education: list[Education] | None = None
 
     def target_path(self):
-        return f"cv-{self.name.lower().replace(" ", "_")}.tex"
+        return f"cv-{self.name.lower().replace(" ", "_").replace("/", "-")}.tex"

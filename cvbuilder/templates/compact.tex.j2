@@ -112,11 +112,14 @@
 \end{center}
 \vspace{-0.5em}
 
+{% if profile.skills %}
 % Skills
 \fsec{ {{- config.get_override("skills") | default("Skills", true) -}} }
 {%- for skill in profile.skills %}
     \topic{ {{- skill.scope -}} }{ {{- ", ".join(skill.values) -}} }
-{% endfor %}
+{% endfor %}{% endif %}
+
+{% if profile.language %}
 % Language Proficiency
 \fsec{ {{- config.get_override("languages") | default("Languages", true) -}} }
 
@@ -132,7 +135,9 @@
         \textbf{ {{- language.test_registration -}} :} {{ language.test_code -}}
         {%- endif -%}
     }
-{% endfor %}
+{% endfor %}{% endif %}
+
+{% if profile.experience %}
 % Professional Experience
 \fsec{ {{- config.get_override("experience") | default("Professional Experience", true) -}} }
 {%- for experience in profile.experience %}
@@ -151,7 +156,9 @@
         \item {{ action }}
         {%- endfor %}
     }
-{% endfor %}
+{% endfor %}{% endif %}
+
+{% if profile.project %}
 % Projects
 \fsec{ {{- config.get_override("projects") | default("Projects", true) -}} }
 {%- for project in profile.project %}
@@ -160,14 +167,16 @@
         \item {{ detail }}
         {%- endfor %}
     }
-{% endfor %}
+{% endfor %}{% endif %}
+
+{% if profile.education %}
 % Education
 \fsec{ {{- config.get_override("education") | default("Education", true) -}} }
 {%- for education in profile.education %}
     \education{ {{- education.institution -}} }{ {{- education.location -}} }
         { {{- education.course -}} }{ {{- education.level -}} }
         { {{- education.start -}} }{ {{- education.end -}} }
-{% endfor %}
+{% endfor %}{% endif %}
 % --- Document: End ---
 \end{document}
 
