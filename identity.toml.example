@@ -1,1 +1,55 @@
-# TODO: Implement this
+# vi: ft=toml
+[identity]
+first_name = "John"
+family_name = "Random Doe"
+
+[[profile]]
+name = "Customer Service Representative"
+
+[[profile.skills]]
+scope = "Customer Service"
+values = [
+    "Customer Support",
+    "Issue Resolution",
+    "Call Handling",
+    "Complaint Management",
+    "Order Processing"
+]
+
+[[profile.skills]]
+scope = "Tools"
+values = [
+    "CRM Systems",
+    "Email Support Platforms",
+    "Ticketing Systems"
+]
+
+[[profile.skills]]
+scope = "General Skills"
+values = [
+    "Written Communication",
+    "Verbal Communication",
+    "Time Management",
+    "Problem Solving"
+]
+
+[[profile.language]]
+name = "English"
+level = "Fluent"
+
+[[profile.language]]
+name = "Portuguese"
+level = "Basic"
+
+[[profile.experience]]
+at = "Retail Support Center"
+role = "Customer Service Representative"
+location = "São José dos Campos, SP"
+start = "2021-03"
+end = "2024-02"
+actions = [
+    "Handled inbound customer inquiries via phone and email",
+    "Resolved billing and order issues following company procedures",
+    "Escalated complex cases to senior support when required",
+    "Maintained accurate records in the CRM system"
+]
