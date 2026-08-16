@@ -40,4 +40,4 @@ def main():
             cleanup(all=args.all)
 
         case "docs":
-            print(render(args.format))
+            print(render(args.format, Config))

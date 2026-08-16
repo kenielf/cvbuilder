@@ -5,15 +5,14 @@ from cvbuilder.docs.formats.markdown import FORMATTER as MD
 from cvbuilder.docs.formats.plain import FORMATTER as PLAIN
 from cvbuilder.docs.formatter import FormatterMap
 from cvbuilder.docs.types import anchor_for, format_type
-from cvbuilder.models.config import Config
 
 
-def render(fmt: str) -> str:
+def render(fmt: str, cfg) -> str:
     match fmt:
         case "markdown":
-            return _render_model(Config, MD)
+            return _render_model(cfg, MD)
         case "plain":
-            return _render_model(Config, PLAIN)
+            return _render_model(cfg, PLAIN)
         case _:
             raise RuntimeError(f"Unknown format: {fmt}")
 
@@ -56,6 +55,8 @@ def _render_model(
 
         for ref in refs:
             if ref is not root:
+                # TODO: This is pretty bad, needs to use a proper formatter
+                # for references, some formats support direct linking.
                 line += f" (see {ref.__name__})"
                 submodels.add(ref)
 
