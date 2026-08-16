@@ -1,6 +1,7 @@
 from cvbuilder.models import Base
 
 
+# TODO: Add the documentation decorator
 class Identity(Base):
     first_name: str
     family_name: str

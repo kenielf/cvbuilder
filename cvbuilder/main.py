@@ -2,7 +2,9 @@ from pathlib import Path
 
 from cvbuilder.args import PARSER
 from cvbuilder.config import ConfigError, parse_config
+from cvbuilder.docs import render
 from cvbuilder.logs import error, fatal, info
+from cvbuilder.models.config import Config
 from cvbuilder.tex import CompilerCheckFailure, build, cleanup, tex_check
 
 
@@ -36,3 +38,6 @@ def main():
         case "clean":
             info(f"Cleaning up all profiles...")
             cleanup(all=args.all)
+
+        case "docs":
+            print(render(args.format))

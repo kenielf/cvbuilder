@@ -1,13 +1,16 @@
-from cvbuilder.models import Base
+from cvbuilder.models import Base, Field
 from cvbuilder.models.identity import Identity
 from cvbuilder.models.meta import Meta
 from cvbuilder.models.profiles import Profile
 
 
+@Base.doc("The complete configuration model - includes all others")
 class Config(Base):
-    identity: Identity
-    meta: Meta | None = None
-    profile: list[Profile]
+    identity: Identity = Field(description="Identity configuration block")
+    meta: Meta | None = Field(
+        None, description="Optional metadata for the configuration"
+    )
+    profile: list[Profile] = Field(description="List of curriculum profiles")
 
     # def __init__(self, data: dict):
     #     self.identity = Identity.model_validate(data["identity"])

@@ -6,6 +6,7 @@ from cvbuilder.models.profiles.project import Project
 from cvbuilder.models.profiles.skills import Skills
 
 
+# TODO: Add the documentation decorator
 class Profile(Base):
     name: str
     skills: list[Skills] | None = None
