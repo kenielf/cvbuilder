@@ -6,7 +6,7 @@ from cvbuilder.models.profiles.project import Project
 from cvbuilder.models.profiles.skills import Skills
 
 
-# TODO: Add the documentation decorator
+@Base.doc("An identity can hold multiple profiles, each one contains the sections used in the template")
 class Profile(Base):
     name: str
     skills: list[Skills] | None = None

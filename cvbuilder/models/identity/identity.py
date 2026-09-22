@@ -1,7 +1,7 @@
 from cvbuilder.models import Base
 
 
-# TODO: Add the documentation decorator
+@Base.doc("The identity model - holds the data for the user identification")
 class Identity(Base):
     first_name: str
     family_name: str

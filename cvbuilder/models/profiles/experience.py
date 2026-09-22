@@ -1,6 +1,7 @@
 from cvbuilder.models import Base
 
 
+@Base.doc("Holds the professional experience, end times and actions are optional")
 class Experience(Base):
     at: str
     role: str
