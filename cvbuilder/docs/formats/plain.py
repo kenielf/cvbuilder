@@ -4,6 +4,8 @@ RESET = "\033[0m"
 BOLD = "\033[1m"
 ITALIC = "\033[3m"
 DIM = "\033[2m"
+# TODO: Add colors (optional with NO_COLORS)
+# see: https://no-color.org/
 
 FORMATTER: FormatterMap = {
     "class_": lambda cls: f"{BOLD}{cls.__name__}{RESET}",
@@ -14,4 +16,5 @@ FORMATTER: FormatterMap = {
         f"  {BOLD}{name}{RESET}: {ITALIC}{type_str}{RESET}"
     ),
     "field_meta": lambda text: f"    {DIM}{text}{RESET}",
+    "field_anchor": lambda name: f" {DIM}(see {name}){RESET}",
 }

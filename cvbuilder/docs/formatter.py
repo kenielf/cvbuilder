@@ -26,6 +26,9 @@ class FieldFormatter(Protocol):
 class FieldMetaFormatter(Protocol):
     def __call__(self, text: str) -> str: ...
 
+class FieldAnchorFormatter(Protocol):
+    def __call__(self, name: str) -> str: ...
+
 
 class FormatterMap(TypedDict):
     class_: ClassFormatter
@@ -34,3 +37,4 @@ class FormatterMap(TypedDict):
     subsection: SubsectionFormatter
     field: FieldFormatter
     field_meta: FieldMetaFormatter
+    field_anchor: FieldAnchorFormatter

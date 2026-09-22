@@ -55,9 +55,7 @@ def _render_model(
 
         for ref in refs:
             if ref is not root:
-                # TODO: This is pretty bad, needs to use a proper formatter
-                # for references, some formats support direct linking.
-                line += f" (see {ref.__name__})"
+                line += fmt["field_anchor"](ref.__name__)
                 submodels.add(ref)
 
         lines.append(line)
