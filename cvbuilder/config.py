@@ -57,7 +57,7 @@ def parse_config(f: Path) -> Config:
         reasons = [parse_model_error(e) for e in errors.errors()]
         if len(reasons) > 1:
             raise ConfigError(
-                f"Found multiple configuration errors:\n\t- " + "\n\t- ".join(reasons)
+                f"Found multiple configuration errors:\n\t- {"\n\t-".join(reasons)}"
             )
         else:
             raise ConfigError(f"Found a cofiguration error: {reasons[0]}")

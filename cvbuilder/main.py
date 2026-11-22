@@ -28,7 +28,7 @@ def main():
                         info(f"Compiling Profile: {profile.name}")
                         build(config, profile)
                 except ConfigError as e:
-                    error(f"{type(e).__name__}: {str(e)}")
+                    error(f"{type(e).__name__}: {e}")
                     failures.append(p.name)
                     continue
 
