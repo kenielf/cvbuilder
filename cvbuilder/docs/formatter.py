@@ -1,14 +1,14 @@
-from typing import Protocol, Type, TypedDict
+from typing import Protocol, TypedDict
 
 from pydantic import BaseModel
 
 
 class ClassFormatter(Protocol):
-    def __call__(self, cls: Type[BaseModel]) -> str: ...
+    def __call__(self, cls: type[BaseModel]) -> str: ...
 
 
 class AnchorFormatter(Protocol):
-    def __call__(self, cls: Type[BaseModel]) -> str: ...
+    def __call__(self, cls: type[BaseModel]) -> str: ...
 
 
 class SectionFormatter(Protocol):
