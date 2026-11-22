@@ -23,4 +23,4 @@ class Identity(Base):
                         self.family_name.split(" ")[-1],
                     )
                 )
-        return " ".join((self.first_name, self.family_name))
+        return f"{self.first_name} {self.family_name}"
