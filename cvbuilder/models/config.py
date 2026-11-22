@@ -4,13 +4,15 @@ from cvbuilder.models.meta import Meta
 from cvbuilder.models.profiles import Profile
 
 
-@Base.doc("The complete configuration model - includes all others")
+@Base.doc("Root of the configuration file; contains every other model")
 class Config(Base):
-    identity: Identity = Field(description="Identity configuration block")
+    identity: Identity = Field(description="Personal details of the CV owner")
     meta: Meta | None = Field(
-        None, description="Optional metadata for the configuration"
+        None, description="Settings that customize how the CV is rendered"
     )
-    profile: list[Profile] = Field(description="List of curriculum profiles")
+    profile: list[Profile] = Field(
+        description="CV profiles; each one is rendered to its own file"
+    )
 
     # def __init__(self, data: dict):
     #     self.identity = Identity.model_validate(data["identity"])
