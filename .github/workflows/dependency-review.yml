@@ -1,0 +1,85 @@
+name: Dependency review
+
+# GitHub cron has no "every N days" syntax that survives month boundaries
+# (`*/14` in the day field resets on the 1st), so this runs every Monday and
+# skips odd weeks. Manual runs always open an issue.
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  open-issue:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      LABEL: dependencies
+    steps:
+      - name: Only run every other week
+        id: gate
+        run: |
+          week=$(( $(date +%s) / 604800 ))
+          if [ "${{ github.event_name }}" = "schedule" ] && [ $(( week % 2 )) -ne 0 ]; then
+            echo "Off week ($week), skipping."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skip if a review issue is already open
+        id: existing
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          open=$(gh issue list -R "$GITHUB_REPOSITORY" --label "$LABEL" --state open --json number --jq 'length' 2>/dev/null || echo 0)
+          if [ "$open" -gt 0 ]; then
+            echo "A dependency review issue is already open, skipping."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.existing.outputs.run == 'true'
+
+      - uses: actions/setup-python@v5
+        if: steps.existing.outputs.run == 'true'
+        with:
+          python-version: "3.14"
+
+      - name: Find outdated packages
+        if: steps.existing.outputs.run == 'true'
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install --quiet --disable-pip-version-check -r requirements.txt
+          .venv/bin/pip list --outdated --format=json --disable-pip-version-check \
+            --exclude pip --exclude setuptools > outdated.json
+          python - <<'EOF'
+          import json
+          from pathlib import Path
+
+          rows = json.loads(Path("outdated.json").read_text())
+          if rows:
+              table = "| Package | Pinned | Latest |\n|---|---|---|\n" + "\n".join(
+                  f"| [{r['name']}](https://pypi.org/project/{r['name']}/) "
+                  f"| {r['version']} | {r['latest_version']} |"
+                  for r in rows
+              )
+          else:
+              table = "Everything in `requirements.txt` is up to date."
+          template = Path(".github/dependency-review.md").read_text()
+          Path("body.md").write_text(template.replace("{{OUTDATED}}", table))
+          EOF
+
+      - name: Open issue
+        if: steps.existing.outputs.run == 'true'
+        run: |
+          gh label create "$LABEL" --color 0366d6 \
+            --description "Dependency updates and reviews" --force
+          gh issue create \
+            --title "Dependency review — $(date -u +%Y-%m-%d)" \
+            --label "$LABEL" \
+            --body-file body.md
