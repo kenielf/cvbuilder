@@ -36,7 +36,7 @@ def main():
                 fatal("One or more compilations failed", code=2)
 
         case "clean":
-            info(f"Cleaning up all profiles...")
+            info("Cleaning up all profiles...")
             cleanup(all=args.all)
 
         case "docs":
