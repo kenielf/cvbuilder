@@ -23,6 +23,5 @@ class Config(Base):
     #     return f"Config(Teste)"
 
     def get_override(self, key: str) -> str | None:
-        if self.meta and self.meta.overrides:
-            if self.meta.overrides.titles:
-                return self.meta.overrides.titles.get(key, None)
+        if self.meta and self.meta.overrides and self.meta.overrides.titles:
+            return self.meta.overrides.titles.get(key, None)
