@@ -4,7 +4,7 @@ from pydantic_core import PydanticUndefined
 from cvbuilder.docs.formats.markdown import FORMATTER as MD
 from cvbuilder.docs.formats.plain import FORMATTER as PLAIN
 from cvbuilder.docs.formatter import FormatterMap
-from cvbuilder.docs.types import anchor_for, format_type
+from cvbuilder.docs.types import format_type
 
 
 def render(fmt: str, cfg) -> str:

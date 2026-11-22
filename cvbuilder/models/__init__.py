@@ -1,6 +1,6 @@
 from os import getenv
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from cvbuilder.docs.defaults import DEFAULT_DOC_DICT, doc
 
