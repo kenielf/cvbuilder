@@ -22,4 +22,4 @@ class Profile(Base):
     education: list[Education] | None = Field(None, description="Education entries")
 
     def target_path(self):
-        return f"cv-{self.name.lower().replace(" ", "_").replace("/", "-")}.tex"
+        return f"cv-{self.name.lower().replace(' ', '_').replace('/', '-')}.tex"

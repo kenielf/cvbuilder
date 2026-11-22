@@ -12,9 +12,7 @@ FORMATTER: FormatterMap = {
     "anchor": lambda cls: f"{DIM}#{cls.__name__.lower()}{RESET}",
     "section": lambda title: f"\n{BOLD}{title}{RESET}",
     "subsection": lambda title: f"{ITALIC}{title}{RESET}",
-    "field": lambda name, type_str: (
-        f"  {BOLD}{name}{RESET}: {ITALIC}{type_str}{RESET}"
-    ),
+    "field": lambda name, type_str: f"  {BOLD}{name}{RESET}: {ITALIC}{type_str}{RESET}",
     "field_meta": lambda text: f"    {DIM}{text}{RESET}",
     "field_anchor": lambda name: f" {DIM}(see {name}){RESET}",
 }

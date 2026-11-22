@@ -26,6 +26,7 @@ class FieldFormatter(Protocol):
 class FieldMetaFormatter(Protocol):
     def __call__(self, text: str) -> str: ...
 
+
 class FieldAnchorFormatter(Protocol):
     def __call__(self, name: str) -> str: ...
 

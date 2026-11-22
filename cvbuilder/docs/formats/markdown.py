@@ -7,5 +7,5 @@ FORMATTER: FormatterMap = {
     "subsection": lambda title: f"#### {title}",
     "field": lambda name, type_str: f"- **{name}**: `{type_str}`",
     "field_meta": lambda text: f"  - {text}",
-    "field_anchor": lambda name: f" (see [{name}](#{name.replace(' ', '-')}))"
+    "field_anchor": lambda name: f" (see [{name}](#{name.replace(' ', '-')}))",
 }
