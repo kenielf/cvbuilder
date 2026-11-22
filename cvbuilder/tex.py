@@ -1,9 +1,9 @@
 from os import chdir, getcwd
 from pathlib import Path
 from shutil import rmtree, which
-from subprocess import PIPE, CalledProcessError, run
+from subprocess import CalledProcessError, TimeoutExpired, run
 
-from jinja2 import Environment, PackageLoader, StrictUndefined
+from jinja2 import Environment, PackageLoader, StrictUndefined, TemplateError
 
 from cvbuilder.constants import PROJECT
 from cvbuilder.logs import debug, error
@@ -53,8 +53,8 @@ def compile(p: Path, name: str, is_rerun: bool = False):
         chdir(BUILD_PATH)
         r = run(
             [COMPILER_PROG, *COMPILER_ARGS, p.name],
-            stdout=PIPE,
-            stderr=PIPE,
+            cwd=BUILD_PATH,
+            capture_output=True,
             check=True,
             timeout=30,
             text=True,
@@ -67,8 +67,6 @@ def compile(p: Path, name: str, is_rerun: bool = False):
                 error("Requested rerun on rerun, bad.")
         chdir(pwd)
     except CalledProcessError as e:
-        if getcwd() == BUILD_PATH:
-            chdir(pwd)
         raise CompilationFailure(
             f"Failed to compile the {name} profile - {COMPILER_PROG} returned {e.returncode}"
             # TODO: Implement parsing of the tex compilation
@@ -89,11 +87,17 @@ def build(c: Config, p: Profile):
     try:
         # TODO: Override this in the user data/configuration
         path = BUILD_PATH / p.target_path()
-        with open(path, "w") as file:
+        with open(path, "w", encoding="utf-8") as file:
             file.write(ENV.get_template(DEFAULT_TEMPLATE).render(config=c, profile=p))
         compile(path, p.name)
-    except Exception as e:
-        raise CompilationFailure(e)
+    except CompilationFailure:
+        raise
+    except TemplateError as e:
+        raise CompilationFailure(f"Template error in profile {p.name}: {e}") from e
+    except TimeoutExpired as e:
+        raise CompilationFailure(f"{COMPILER_PROG} timed out after {e.timeout}s") from e
+    except OSError as e:
+        raise CompilationFailure(f"I/O error while building {p.name}: {e}") from e
 
 
 def cleanup(all: bool = False):
