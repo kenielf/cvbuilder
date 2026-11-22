@@ -1,7 +1,7 @@
-from cvbuilder.models import Base
+from cvbuilder.models import Base, Field
 
 
-@Base.doc("Holds the information for listing the skills in a list format, scoped")
+@Base.doc("A list of skills grouped under a scope")
 class Skills(Base):
-    scope: str
-    values: list[str]
+    scope: str = Field(description="Category the skills belong to")
+    values: list[str] = Field(description="Skills listed under this scope")

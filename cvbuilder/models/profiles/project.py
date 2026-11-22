@@ -1,8 +1,8 @@
-from cvbuilder.models import Base
+from cvbuilder.models import Base, Field
 
 
-@Base.doc("Holds the information for coding (for now) projects, languages are optional")
+@Base.doc("A project entry, currently aimed at software; the language is optional")
 class Project(Base):
-    name: str
-    language: str | None = None
-    details: list[str]
+    name: str = Field(description="Name of the project")
+    language: str | None = Field(None, description="Main programming language used")
+    details: list[str] = Field(description="Project highlights, one per item")

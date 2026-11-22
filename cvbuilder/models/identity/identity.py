@@ -1,10 +1,12 @@
-from cvbuilder.models import Base
+from cvbuilder.models import Base, Field
 
 
-@Base.doc("The identity model - holds the data for the user identification")
+@Base.doc("Personal details that identify the CV owner")
 class Identity(Base):
-    first_name: str
-    family_name: str
+    first_name: str = Field(description="Given name(s) of the person")
+    family_name: str = Field(
+        description="Family name(s) of the person; all but the last are abbreviated when shortened"
+    )
 
     def get_full_name(self, shorten: bool = False):
         if shorten:
