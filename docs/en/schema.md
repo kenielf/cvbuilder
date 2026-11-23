@@ -17,6 +17,25 @@ Personal details that identify the CV owner
   - Given name(s) of the person
 - **family_name**: `str`
   - Family name(s) of the person; all but the last are abbreviated when shortened
+- **contact**: `Contact (Optional)` (see [Contact](#Contact))
+  - Contact details shown below the CV title
+
+## Contact
+<a id="contact"></a>
+Ways to reach the CV owner; every field is optional
+### Fields
+- **email**: `str (Optional)`
+  - Email address
+- **phone**: `str (Optional)`
+  - Phone number, written as it should appear (e.g. +55 12 91234-5678)
+- **location**: `str (Optional)`
+  - Where the person lives (e.g. São José dos Campos, SP)
+- **website**: `str (Optional)`
+  - Personal website or portfolio URL
+- **github**: `str (Optional)`
+  - GitHub username or profile URL
+- **linkedin**: `str (Optional)`
+  - LinkedIn handle or profile URL
 
 ## Meta
 <a id="meta"></a>

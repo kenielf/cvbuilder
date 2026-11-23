@@ -4,6 +4,13 @@
 \usepackage[left=1cm,top=1cm,bottom=1cm,right=1cm]{geometry}
 
 \usepackage{luatexja}
+\usepackage{fontawesome5}
+% fontawesome5 selects the solid/regular series, which luatexja has no Japanese
+% shapes for; the resulting substitution breaks microtype on brand icons.
+\DeclareFontShape{JY3}{mc}{solid}{n}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JT3}{mc}{solid}{n}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JY3}{mc}{regular}{n}{<->ssub*mc/m/n}{}
+\DeclareFontShape{JT3}{mc}{regular}{n}{<->ssub*mc/m/n}{}
 
 % Pagestyle
 \usepackage{fancyhdr}
@@ -31,6 +38,7 @@
     linkcolor=black,
     filecolor=magenta,
     urlcolor=blue,
+    pdfauthor={ {{- config.identity.get_full_name() -}} },
     pdftitle={ {{- config.get_override("document") | default("Curriculum", true) }} - {{ config.identity.get_full_name() -}} },
     pdfpagemode=FullScreen,
 }
@@ -52,17 +60,26 @@
 % Occupation: \occupation{Work}
 \newcommand{\occupation}[1]{\faSuitcase\hspace{0.25em}#1}
 
+% Contact item, kept on one line: \contactitem{icon}{content}
+\newcommand{\contactitem}[2]{\mbox{#1\hspace{0.3em}#2}}
+
 % Location: \location{State, Country}
-\newcommand{\location}[1]{\faGlobe\hspace{0.25em}#1}
+\newcommand{\location}[1]{\contactitem{\faMapMarker*}{#1}}
+
+% Phone: \phone{tel:+5512912345678}{+55 12 91234-5678}
+\newcommand{\phone}[2]{\contactitem{\faPhone}{\href{#1}{#2}}}
 
 % Email: \email{something@provider.com}
-\newcommand{\email}[1]{\faAt\hspace{0.25em}#1}
+\newcommand{\email}[1]{\contactitem{\faEnvelope}{\href{mailto:#1}{\nolinkurl{#1}}}}
 
-% Github Link: \github{\url{https://github.com/user/repo}}
-\newcommand{\github}[1]{\faGithub\hspace{0.25em}#1}
+% Website: \website{https://example.com}{example.com}
+\newcommand{\website}[2]{\contactitem{\faGlobe}{\href{#1}{\nolinkurl{#2}}}}
 
-% LinkedIn Link: \linkedin{\url{https://linkedin.com/in/user}}
-\newcommand{\linkedin}[1]{\faLinkedin\hspace{0.25em}#1}
+% Github: \github{user}
+\newcommand{\github}[1]{\contactitem{\faGithub}{\href{https://github.com/#1}{\nolinkurl{github.com/#1}}}}
+
+% LinkedIn: \linkedin{user}
+\newcommand{\linkedin}[1]{\contactitem{\faLinkedin}{\href{https://linkedin.com/in/#1}{\nolinkurl{linkedin.com/in/#1}}}}
 
 % Topics: \topic{example}{text}
 \newcommand{\topic}[2]{\textbf{#1:} #2}
@@ -111,6 +128,20 @@
     \vspace{0.25em}
 
     {\Large {{ profile.name -}} }
+{%- set contact = config.identity.contact %}
+{%- if contact %}
+    \vspace{0.5em}
+
+    {% set sep = joiner(" \\quad ") %}
+    {\small
+    {%- if contact.location %} {{ sep() }}\location{ {{- contact.location -}} }{% endif %}
+    {%- if contact.phone %} {{ sep() }}\phone{ {{- contact.phone_uri() -}} }{ {{- contact.phone -}} }{% endif %}
+    {%- if contact.email %} {{ sep() }}\email{ {{- contact.email -}} }{% endif %}
+    {%- if contact.website %} {{ sep() }}\website{ {{- contact.website_url() -}} }{ {{- contact.website_label() -}} }{% endif %}
+    {%- if contact.github %} {{ sep() }}\github{ {{- contact.github_handle() -}} }{% endif %}
+    {%- if contact.linkedin %} {{ sep() }}\linkedin{ {{- contact.linkedin_handle() -}} }{% endif %}
+    }
+{%- endif %}
 \end{center}
 \vspace{-0.5em}
 

@@ -3,6 +3,13 @@
 first_name = "John"
 family_name = "Random Doe"
 
+[identity.contact]
+email = "john.doe@example.com"
+phone = "+55 12 91234-5678"
+location = "São José dos Campos, SP"
+github = "johndoe"
+linkedin = "john-doe"
+
 [[profile]]
 name = "Customer Service Representative"
 

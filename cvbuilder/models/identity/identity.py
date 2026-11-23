@@ -1,4 +1,5 @@
 from cvbuilder.models import Base, Field
+from cvbuilder.models.identity.contact import Contact
 
 
 @Base.doc("Personal details that identify the CV owner")
@@ -6,6 +7,9 @@ class Identity(Base):
     first_name: str = Field(description="Given name(s) of the person")
     family_name: str = Field(
         description="Family name(s) of the person; all but the last are abbreviated when shortened"
+    )
+    contact: Contact | None = Field(
+        None, description="Contact details shown below the CV title"
     )
 
     def get_full_name(self, shorten: bool = False):
