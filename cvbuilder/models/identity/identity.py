@@ -8,6 +8,11 @@ class Identity(Base):
     family_name: str = Field(
         description="Family name(s) of the person; all but the last are abbreviated when shortened"
     )
+    shorten_name: bool = Field(
+        True,
+        description="Abbreviate all but the last family name in the CV heading "
+        "(e.g. John R. Doe); set to false to print the full name",
+    )
     contact: Contact | None = Field(
         None, description="Contact details shown below the CV title"
     )

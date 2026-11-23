@@ -17,6 +17,9 @@ Personal details that identify the CV owner
   - Given name(s) of the person
 - **family_name**: `str`
   - Family name(s) of the person; all but the last are abbreviated when shortened
+- **shorten_name**: `bool`
+  - Abbreviate all but the last family name in the CV heading (e.g. John R. Doe); set to false to print the full name
+  - Default: True
 - **contact**: `Contact (Optional)` (see [Contact](#Contact))
   - Contact details shown below the CV title
 

@@ -33,6 +33,7 @@
 
 % URL Support
 \usepackage{hyperref}
+\usepackage{accsupp}  % Hides decorative icons from text extraction
 \hypersetup{
     colorlinks=true,
     linkcolor=black,
@@ -58,10 +59,14 @@
 \newcommand{\fsec}[1]{\vspace{-1.25em}\section*{#1}\sep}
 
 % Occupation: \occupation{Work}
-\newcommand{\occupation}[1]{\faSuitcase\hspace{0.25em}#1}
+\newcommand{\occupation}[1]{\decoicon{\faSuitcase}\hspace{0.25em}#1}
+
+% Decorative icon with empty ActualText, so copy/paste and ATS parsers skip
+% its glyph name ("Envelope", "Phone", ...): \decoicon{\faEnvelope}
+\newcommand{\decoicon}[1]{\BeginAccSupp{method=escape,ActualText={}}#1\EndAccSupp{}}
 
 % Contact item, kept on one line: \contactitem{icon}{content}
-\newcommand{\contactitem}[2]{\mbox{#1\hspace{0.3em}#2}}
+\newcommand{\contactitem}[2]{\mbox{\decoicon{#1}\hspace{0.3em}#2}}
 
 % Location: \location{State, Country}
 \newcommand{\location}[1]{\contactitem{\faMapMarker*}{#1}}
@@ -124,7 +129,7 @@
 
 % Name and Occupation
 \begin{center}
-    {\huge \textbf{ {{- config.identity.get_full_name(shorten=True) | upper -}} }}
+    {\huge \textbf{ {{- config.identity.get_full_name(shorten=config.identity.shorten_name) | upper -}} }}
     \vspace{0.25em}
 
     {\Large {{ profile.name -}} }
