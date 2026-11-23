@@ -6,7 +6,7 @@ requires-python = ">=3.14"
 dynamic = ["dependencies", "optional-dependencies"]
 
 [project.scripts]
-your-command = "main:main"
+cvbuilder = "cvbuilder.main:main"
 
 [tool.setuptools.dynamic]
 dependencies = {file = ["requirements.txt"]}
