@@ -37,7 +37,9 @@ Values that replace the template defaults
 One version of the CV; an identity can have several, each with its own sections
 ### Fields
 - **name**: `str`
-  - Profile name; also used to build the output file name
+  - Profile name; used to build the output file name unless slug is set
+- **slug**: `str (Optional)`
+  - Output file name stem (without the cv- prefix); must be unique across all built profiles
 - **skills**: `list[Skills] (Optional)` (see [Skills](#Skills))
   - Scoped skill lists
 - **language**: `list[Language] (Optional)` (see [Language](#Language))

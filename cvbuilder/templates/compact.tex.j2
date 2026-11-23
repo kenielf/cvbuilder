@@ -31,7 +31,7 @@
     linkcolor=black,
     filecolor=magenta,
     urlcolor=blue,
-    pdftitle={Curriculum - {{ config.identity.get_full_name() -}} },
+    pdftitle={ {{- config.get_override("document") | default("Curriculum", true) }} - {{ config.identity.get_full_name() -}} },
     pdfpagemode=FullScreen,
 }
 \urlstyle{same}
@@ -71,15 +71,17 @@
 \newcommand{\experience}[6]{
     \noindent\textbf{#1} \hfill #3 \\
     \noindent#2 \hfill #4 -- #5
+    \ifblank{#6}{}{
     \begin{itemize}[align=right]
         #6
     \end{itemize}
+    }
     \vspace{1em}
 }
 
 % Project: \project{title}{language}{details}
 \newcommand{\project}[3]{
-    \noindent\textbf{#1} \textit{(#2)}
+    \noindent\textbf{#1}\ifstrempty{#2}{}{ \textit{(#2)}}
     \begin{itemize}[align=right]
         #3
     \end{itemize}
@@ -146,13 +148,13 @@
     }{
         {{- experience.role -}}
     }{
-        {{- experience.location -}}
+        {{- experience.location if experience.location -}}
     }{
         {{- experience.start -}}
     }{
         {{- experience.end if experience.end -}}
     }{
-        {%- for action in experience.actions %}
+        {%- for action in experience.actions or [] %}
         \item {{ action }}
         {%- endfor %}
     }
@@ -162,7 +164,7 @@
 % Projects
 \fsec{ {{- config.get_override("projects") | default("Projects", true) -}} }
 {%- for project in profile.project %}
-    \project{ {{- project.name -}} }{ {{- project.language -}} }{
+    \project{ {{- project.name -}} }{ {{- project.language if project.language -}} }{
         {%- for detail in project.details %}
         \item {{ detail }}
         {%- endfor %}

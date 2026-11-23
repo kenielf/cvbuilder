@@ -19,12 +19,23 @@ def main():
     match args.command:
         case "build":
             failures = []
+            targets: dict[str, str] = {}
             for identity in args.paths:
                 p = Path(identity)
                 try:
                     config = parse_config(p)
 
                     for profile in config.profile:
+                        target = profile.target_path()
+                        owner = f"{p.name}: {profile.name}"
+                        if target in targets:
+                            error(
+                                f"Profile '{owner}' would overwrite '{targets[target]}' "
+                                f"({target}); set a unique 'slug' on one of them"
+                            )
+                            failures.append(owner)
+                            continue
+                        targets[target] = owner
                         info(f"Compiling Profile: {profile.name}")
                         build(config, profile)
                 except ConfigError as e:
